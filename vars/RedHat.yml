@@ -1,0 +1,5 @@
+---
+# vars file for RedHat
+
+ntpd_package: ntp
+ntpd_daemon: ntpd

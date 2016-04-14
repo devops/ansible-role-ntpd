@@ -1,0 +1,22 @@
+restrict default kod nomodify notrap nopeer noquery
+restrict 127.0.0.1
+
+{% for net in ntpd_restrict_net %}
+restrict {{ net.net }} mask {{ net.mask }} nomodify notrap
+{% endfor %}
+
+{% if ntpd_ipv6_enable %}
+restrict -6 default kod nomodify notrap nopeer noquery
+restrict -6 ::1
+{% endif %}
+
+{% for server in ntpd_ntp_servers %}
+server {{ server }}
+{% endfor %}
+
+fudge 127.127.1.0 stratum 10
+
+logfile {{ ntpd_logfile }}
+driftfile /var/lib/ntp/drift
+includefile /etc/ntp/crypto/pw
+keys /etc/ntp/keys

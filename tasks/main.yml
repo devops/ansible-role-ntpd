@@ -1,0 +1,16 @@
+---
+# tasks file for ntpd
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install NTP Server.
+  yum: name={{ ntpd_package }} state=installed
+
+- name: Copy NTP configure file.
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  notify:
+    - restart ntpd
+
+- name: Ensure NTP Service is started and enabled at system start.
+  service: name="{{ ntpd_daemon }}" state=started enabled=yes
